@@ -4,11 +4,10 @@
 
 ## Overview
 
-in this part of the project we are asked to build and rearchitecting ***Bazar online store*** we built in Lab 1 to handle a higher workload.
-
+We are required to create and redesign the ***Bazar online store*** we built in Part 1 to manage a heavier workload in this section of the project.
 ## System Design and Replication
 - - -
-We created two replicas of the ***catalog server*** and two replicas of the ***order server***, and one replica for the ***front-end server*** and one replica for the ***cache server (memcached server)*** as shown in the image below : 
+As indicated in the figure below, we created two replicas of the ***catalog server***, two replicas of the ***order server***, one replica of the ***front-end server***, and one replica of the ***cache server (memcached server)***
 
 ![alt text](https://i.ibb.co/m41vpNG/bazar-store.png "Title")
 
@@ -49,18 +48,16 @@ and we can download ***memcached server*** docker image using the following link
 
 ## Consistancy 
 - - -
-to ensure the consistancy across replicas we use internal protocol ***(Remote-Write Protocol)*** and we considered the ***catalog-instance1 as a primary server*** and other replicas such as ***catalog-instance2 as a normal server*** , so if any write requests comes to catalog-instance2 it forwards it to the primary server
-and the primary server tell other replicas to update their data, but if the write request comes to catalog-instance1 which is the primary server it updated the data on its database and then tell other replicas to update their data.
+We use an internal protocol called ***(Remote-Write Protocol)*** to ensure consistency across replicas, and we treated catalog-instance1 as a primary server and other replicas like catalog-instance2 as normal servers, so any write requests that come to catalog-instance2 are forwarded to the primary server, and the primary server tells other replicas to update their data, but if the write request comes to catalog-instance1 which is the primary server, it is updated
 
 ## Cache Consistancy
 ---
-we ensure cache consistancy by using **Push Approach**, when any write request occurs we check if the value we written in is cached or not , if the value is cached send invalidate request to the Memcached server to remove it from the cache. 
+We use the **Push Approach** to ensure cache consistency: whenever a write request is made, we check if the value we wrote in is cached or not, and if it is, we send an invalidate request to the Memcached server to remove it from the cache.
 
 
 ## Load Balancing
 
-for the load balancing in the front-end server we used Round Robin approach , and because all the servers have the same capabilites we balanced the requests to 50% for each server.
+We used the Round Robin approach for load balancing in the front-end server, and because all the servers have the same capabilities, we balanced the requests to 50% for each server.
 
 
-## Performance Measurements
 
